@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Personal Ask Link</title>
+  <meta name="description" content="Create a private personalized link to the ask page.">
+  <meta property="og:title" content="Create Personal Ask Link">
+  <meta property="og:description" content="Build one personalized link and send it.">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body data-theme="classic">
+  <main class="page">
+    <header class="hero">
+      <p class="eyebrow">Private Builder</p>
+      <h1>Create one personal link</h1>
+      <p class="subtext">This page is only for you. The final link opens the clean main page for her.</p>
+      <p class="ribbon-note"><a class="builder-back" href="index.html">Open Main Page</a></p>
+    </header>
+
+    <section class="maker-card" aria-label="Create your personal ask link">
+      <h2 class="maker-title">Create Your Ask Link</h2>
+      <p class="maker-subtitle">Set details once, generate one personal link, then send it.</p>
+
+      <div class="maker-grid">
+        <label class="maker-field">
+          <span>Crush name</span>
+          <input id="builderToInput" type="text" maxlength="20" placeholder="Yasha">
+        </label>
+        <label class="maker-field">
+          <span>Your name</span>
+          <input id="builderFromInput" type="text" maxlength="24" placeholder="Your name">
+        </label>
+      </div>
+
+      <label class="maker-field">
+        <span>Custom message</span>
+        <textarea id="builderMsgInput" maxlength="140" placeholder="Why she should say yes..."></textarea>
+      </label>
+
+      <label class="maker-field">
+        <span>Song link (optional)</span>
+        <input id="builderSongInput" type="url" placeholder="https://example.com/song">
+      </label>
+
+      <label class="anon-row">
+        <input id="builderAnonInput" type="checkbox">
+        <span>Anonymous mode (your name reveals only after yes)</span>
+      </label>
+
+      <div class="vibe-panel">
+        <p class="reason-title">Pick the vibe</p>
+        <div class="vibe-grid" role="radiogroup" aria-label="Theme selection">
+          <button class="vibe-card is-selected" type="button" role="radio" aria-checked="true" data-theme="classic"
+            aria-label="Classic Red theme">
+            <span class="vibe-swatch classic" aria-hidden="true">❤️</span>
+            <span class="vibe-name">Classic Red</span>
+          </button>
+          <button class="vibe-card" type="button" role="radio" aria-checked="false" data-theme="soft"
+            aria-label="Soft Pink theme">
+            <span class="vibe-swatch soft" aria-hidden="true">🌸</span>
+            <span class="vibe-name">Soft Pink</span>
+          </button>
+          <button class="vibe-card" type="button" role="radio" aria-checked="false" data-theme="cyber"
+            aria-label="Cyber Lavender theme">
+            <span class="vibe-swatch cyber" aria-hidden="true">💜</span>
+            <span class="vibe-name">Lavender</span>
+          </button>
+        </div>
+        <p class="vibe-hint" id="builderVibeHint">Classic Red selected.</p>
+      </div>
+
+      <div class="share-panel">
+        <label class="share-label" for="builderLinkInput">Personal link</label>
+        <div class="share-row">
+          <input class="share-link" id="builderLinkInput" type="text" readonly value="">
+          <button class="btn btn-shorten" id="builderShortenBtn" type="button">Shorten</button>
+          <button class="btn btn-copy" id="builderCopyBtn" type="button">Copy</button>
+          <button class="btn btn-share" id="builderShareBtn" type="button">Share</button>
+        </div>
+        <div class="maker-actions">
+          <button class="btn btn-sendlink" id="builderWaBtn" type="button">Email link</button>
+          <button class="btn btn-maker" id="builderOpenBtn" type="button">Open personal page</button>
+        </div>
+        <p class="share-note">Main page no longer shows creator controls. This link is for her view only.</p>
+      </div>
+
+      <p class="status-line" id="builderStatus" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <script src="create.js"></script>
+</body>
+
+</html>

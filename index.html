@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yasha, Will You Go Out With Me?</title>
+  <meta name="description" content="A special page with a special question for Yasha.">
+  <meta property="og:title" content="Yasha, Will You Go Out With Me?">
+  <meta property="og:description" content="A special page with a special question for Yasha.">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body data-theme="classic">
+  <canvas id="confettiCanvas" aria-hidden="true"></canvas>
+  <div class="ambient" id="ambient" aria-hidden="true"></div>
+
+  <main class="page">
+    <header class="hero">
+      <p class="eyebrow" id="heroEyebrow">Zamn</p>
+      <h1><span class="highlight" id="heroTargetName">Yasha</span>, will you go out with me?</h1>
+      <p class="subtext" id="heroSubtext">I could have added you on ig. Instead, I made this because you are worth the effort.</p>
+      <p class="ribbon-note" id="heroNote">took me 4 hours but worth it</p>
+    </header>
+
+    <section class="letter-stage" aria-label="Love letter teaser">
+      <button class="letter-trigger" id="letterTrigger" type="button" aria-label="Open letter and jump to the question">
+        <div class="letter-wrap" aria-hidden="true">
+          <div class="letter-envelope">
+            <div class="letter-flap"></div>
+            <div class="letter-pocket"></div>
+            <div class="letter-seal"></div>
+          </div>
+          <div class="letter-card">
+            <span class="letter-card-title" id="letterCardTitle">for yasha</span>
+            <span class="letter-card-sub">tap to open</span>
+          </div>
+        </div>
+      </button>
+      <p class="letter-note">Tap the envelope to open the letter and jump to the question card.</p>
+    </section>
+
+    <section class="question-card" id="questionCard">
+      <p class="badge">For Her only</p>
+      <p class="prompt-line" id="promptLine" aria-live="polite"></p>
+
+      <div class="reason-box">
+        <p class="reason-title">Why this is a very good idea fr fr:</p>
+        <p class="reason-text" id="reasonText"></p>
+      </div>
+
+      <div class="source-media">
+        <figure class="media-card">
+          <div class="three-scene" data-scene="waiting" role="img" aria-label="Cute waiting 3D illustration">
+            <span class="three-fallback">3D scene loading...</span>
+          </div>
+        </figure>
+      </div>
+
+      <section class="music-card" id="musicSection" aria-label="Song link">
+        <p class="reason-title">Song Link</p>
+        <p class="reason-text" id="songCopy">No song link attached yet.</p>
+        <a class="spotify-link" id="spotifyOpenLink" href="#" rel="noopener noreferrer">No song link added.</a>
+      </section>
+
+      <div class="vibe-panel">
+        <p class="reason-title">Pick the vibe (Ribbon style)</p>
+        <div class="vibe-grid" role="radiogroup" aria-label="Theme selection">
+          <button class="vibe-card is-selected" type="button" role="radio" aria-checked="true" data-theme="classic"
+            aria-label="Classic Red theme">
+            <span class="vibe-swatch classic" aria-hidden="true">❤️</span>
+            <span class="vibe-name">Classic Red</span>
+          </button>
+          <button class="vibe-card" type="button" role="radio" aria-checked="false" data-theme="soft"
+            aria-label="Soft Pink theme">
+            <span class="vibe-swatch soft" aria-hidden="true">🌸</span>
+            <span class="vibe-name">Soft Pink</span>
+          </button>
+          <button class="vibe-card" type="button" role="radio" aria-checked="false" data-theme="cyber"
+            aria-label="Cyber Lavender theme">
+            <span class="vibe-swatch cyber" aria-hidden="true">💜</span>
+            <span class="vibe-name">Lavender</span>
+          </button>
+        </div>
+        <p class="vibe-hint" id="vibeHint" aria-live="polite">Classic Red selected.</p>
+
+        <div class="share-panel">
+          <label class="share-label" for="shareLink">Shareable ask link</label>
+          <div class="share-row">
+            <input class="share-link" id="shareLink" type="text" readonly value="">
+            <button class="btn btn-shorten" id="shortenBtn" type="button">Shorten</button>
+            <button class="btn btn-copy" id="copyLinkBtn" type="button">Copy</button>
+            <button class="btn btn-share" id="shareBtn" type="button">Share</button>
+          </div>
+          <p class="share-note">This keeps the same personal setup and vibe in one link.</p>
+        </div>
+      </div>
+
+      <div class="button-zone" id="buttonZone">
+        <button class="btn btn-yes" id="yesBtn" type="button">Yes, I am in</button>
+        <button class="btn btn-maybe" id="maybeBtn" type="button">Maybe 👀</button>
+        <button class="btn btn-no" id="noBtn" type="button">No... maybe?</button>
+      </div>
+
+      <p class="status-line" id="statusLine" aria-live="polite"></p>
+    </section>
+
+    <section class="love-wall" id="loveWall" aria-label="Love wall notes">
+      <h2>Love Wall</h2>
+      <p class="love-subtitle" id="loveWallSubtitle">Personal notes for this exact link.</p>
+      <div class="love-marquee" id="loveWallMarquee">
+        <div class="love-track" id="loveWallTrack"></div>
+      </div>
+    </section>
+
+    <section class="plan hidden" id="planSection">
+      <h2>Instant Date Blueprint</h2>
+      <div class="plan-grid">
+        <article>
+          <h3>1. Pick the vibe</h3>
+          <p>Coffee walk, sunset drive, or food adventure. Yasha chooses.</p>
+        </article>
+        <article>
+          <h3>2. Dress like it matters</h3>
+          <p>Not too formal. Just enough to show this was planned with care.</p>
+        </article>
+        <article>
+          <h3>3. Make a core memory</h3>
+          <p>Good conversation, zero awkwardness, and one photo to remember it.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="how-section">
+      <h2>How It Works</h2>
+      <div class="how-grid">
+        <article>
+          <h3>1. Open</h3>
+          <p>She opens a personal link built just for her.</p>
+        </article>
+        <article>
+          <h3>2. Pick Vibe</h3>
+          <p>Theme and moment stay consistent through the page.</p>
+        </article>
+        <article>
+          <h3>3. Answer</h3>
+          <p>Yes route unlocks the afterpage and celebration flow.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="faq-section">
+      <h2>FAQ</h2>
+      <details>
+        <summary>Is this page personal?</summary>
+        <p>Yes. It can be generated with custom names, message, and vibe for one person.</p>
+      </details>
+      <details>
+        <summary>Does the link keep the selected vibe?</summary>
+        <p>Yes. Personal settings and vibe remain attached to the link.</p>
+      </details>
+      <details>
+        <summary>Can I share directly?</summary>
+        <p>Use Share, Copy, Shorten, or Email.</p>
+      </details>
+    </section>
+  </main>
+
+  <section class="yes-overlay hidden" id="yesOverlay" aria-live="assertive">
+    <div class="overlay-card">
+      <p class="overlay-kicker">Mission status</p>
+      <h2>Success</h2>
+      <p class="overlay-text" id="overlayText">You said yes. Taking you to the after page...</p>
+      <figure class="success-gif">
+        <div class="three-scene three-scene-success" data-scene="celebrate" role="img" aria-label="Celebration 3D illustration">
+          <span class="three-fallback">3D scene loading...</span>
+        </div>
+      </figure>
+      <button class="btn btn-yes" id="replayBtn" type="button">Open After Page Now</button>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+  <script type="module" src="three-scenes.js"></script>
+</body>
+
+</html>
