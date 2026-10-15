@@ -365,55 +365,53 @@ function createFallbackHeart(color) {
   return mesh;
 }
 
+// One instanced draw per scene instead of a mesh, geometry and material per piece.
 function createConfetti(type) {
-  const group = new THREE.Group();
-  const pieces = [];
   const colors = type === "celebrate"
     ? [0xffa95f, 0x63dcff, 0xff6894, 0xc3b3ff, 0xffd878]
     : [0xf8a4bd, 0xf7bdd0, 0xffd6e2];
   const count = type === "celebrate" ? 18 : 10;
+  const mesh = new THREE.InstancedMesh(
+    new THREE.BoxGeometry(0.13, 0.27, 0.05),
+    new THREE.MeshStandardMaterial({ roughness: 0.36, metalness: 0.12 }),
+    count
+  );
+  mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
 
+  const pieces = [];
+  const color = new THREE.Color();
   for (let index = 0; index < count; index += 1) {
-    const piece = new THREE.Mesh(
-      new THREE.BoxGeometry(0.13, 0.27, 0.05),
-      new THREE.MeshStandardMaterial({
-        color: colors[index % colors.length],
-        roughness: 0.36,
-        metalness: 0.12,
-      })
-    );
-
     const angle = (index / count) * Math.PI * 2;
     const radius = (type === "celebrate" ? 2.5 : 2.2) + (index % 3) * 0.22;
-    piece.position.set(
-      Math.cos(angle) * radius,
-      Math.sin(angle) * radius * 0.44 + 0.24,
-      (index % 5) * 0.05
-    );
-
-    group.add(piece);
+    mesh.setColorAt(index, color.setHex(colors[index % colors.length]));
     pieces.push({
-      mesh: piece,
-      baseX: piece.position.x,
-      baseY: piece.position.y,
-      baseZ: piece.position.z,
+      baseX: Math.cos(angle) * radius,
+      baseY: Math.sin(angle) * radius * 0.44 + 0.24,
+      baseZ: (index % 5) * 0.05,
       phase: Math.random() * Math.PI * 2,
       speed: 0.8 + (index % 5) * 0.14,
     });
   }
 
-  return { group, pieces, type };
+  const group = new THREE.Group();
+  group.add(mesh);
+  return { group, mesh, pieces, type, dummy: new THREE.Object3D() };
 }
 
 function animateConfetti(confetti, timeSeconds) {
   const amplitude = confetti.type === "celebrate" ? 0.22 : 0.12;
-  confetti.pieces.forEach((piece) => {
-    piece.mesh.rotation.x = timeSeconds * piece.speed * 1.2;
-    piece.mesh.rotation.y = timeSeconds * piece.speed;
-    piece.mesh.position.x = piece.baseX + Math.cos(timeSeconds * piece.speed + piece.phase) * 0.09;
-    piece.mesh.position.y = piece.baseY + Math.sin(timeSeconds * piece.speed * 1.15 + piece.phase) * amplitude;
-    piece.mesh.position.z = piece.baseZ + Math.cos(timeSeconds * piece.speed * 0.9 + piece.phase) * 0.08;
+  const { dummy } = confetti;
+  confetti.pieces.forEach((piece, index) => {
+    dummy.rotation.set(timeSeconds * piece.speed * 1.2, timeSeconds * piece.speed, 0);
+    dummy.position.set(
+      piece.baseX + Math.cos(timeSeconds * piece.speed + piece.phase) * 0.09,
+      piece.baseY + Math.sin(timeSeconds * piece.speed * 1.15 + piece.phase) * amplitude,
+      piece.baseZ + Math.cos(timeSeconds * piece.speed * 0.9 + piece.phase) * 0.08
+    );
+    dummy.updateMatrix();
+    confetti.mesh.setMatrixAt(index, dummy.matrix);
   });
+  confetti.mesh.instanceMatrix.needsUpdate = true;
 }
 
 function checkWebglSupport() {
