@@ -7,6 +7,7 @@ Interactive confession microsite with theme options, short-link generation, and 
 - Landing + create flow with animated variants
 - Share link shortener endpoints (`/api/shorten`, `/api/resolve`)
 - Multiple themed after pages
+- Short links unfurl with the real names in WhatsApp, iMessage, Discord and Slack previews
 
 ## Run Locally
 

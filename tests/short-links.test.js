@@ -126,6 +126,34 @@ test("resolve rejects unsupported methods with 405 and Allow header", async () =
   assert.deepEqual(res.body, { error: "Method not allowed. Use GET." });
 });
 
+test("resolve gives link-preview bots personalized, escaped meta tags", async () => {
+  const resolve = require("../api/resolve");
+  const { createInternalShortUrl } = require("../api/_short-links");
+  const payload = Buffer.from(JSON.stringify({ t: "Zoë <b>", f: "Sam", a: 0 })).toString("base64url");
+  const host = { host: "example.com", "x-forwarded-proto": "https" };
+  const shortUrl = await createInternalShortUrl({ headers: host }, `https://example.com/?p=${payload}`);
+  const code = shortUrl.split("/s/")[1];
+
+  const res = createMockResponse();
+  await resolve({ method: "GET", headers: { ...host, "user-agent": "WhatsApp/2.23.20.0 A" }, query: { code } }, res);
+
+  assert.equal(res.statusCode, 200);
+  assert.match(res.body, /<meta property="og:title" content="Zoë &lt;b&gt;, will you go out with me\?">/);
+  assert.match(res.body, /Sam made this page/);
+  assert.doesNotMatch(res.body, /<b>/);
+});
+
+test("resolve still redirects regular browsers", async () => {
+  const resolve = require("../api/resolve");
+  const { createInternalShortUrl } = require("../api/_short-links");
+  const host = { host: "example.com", "x-forwarded-proto": "https" };
+  const shortUrl = await createInternalShortUrl({ headers: host }, "https://example.com/?to=Sam");
+  const res = createMockResponse();
+  await resolve({ method: "GET", headers: { "user-agent": "Mozilla/5.0" }, query: { code: shortUrl.split("/s/")[1] } }, res);
+  assert.equal(res.statusCode, 307);
+  assert.equal(res.headers.location, "/?to=Sam");
+});
+
 function createMockResponse() {
   const headers = {};
   let statusCode = 200;

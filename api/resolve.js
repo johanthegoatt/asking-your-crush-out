@@ -1,6 +1,7 @@
 "use strict";
 
-const { normalizeShortCode, resolveShortCode } = require("./_short-links");
+const { extractRequestOrigin, normalizeShortCode, resolveShortCode } = require("./_short-links");
+const { buildPreviewHtml, isPreviewBot } = require("./_preview");
 
 module.exports = async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
@@ -24,6 +25,11 @@ module.exports = async (req, res) => {
     const destination = await resolveShortCode(code);
     if (!destination) {
       return res.status(404).json({ error: "Short link not found." });
+    }
+
+    if (isPreviewBot(req)) {
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      return res.status(200).end(buildPreviewHtml(destination, extractRequestOrigin(req)));
     }
 
     res.setHeader("Location", destination);
