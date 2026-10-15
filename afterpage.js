@@ -30,15 +30,17 @@ function initAfterpage() {
   const savedState = readSavedState();
   const toName = sanitizeName(
     (payload && (payload.t || payload.to)) || params.get(PARAM_TO) || savedState.toName,
-    "there"
+    ""
   );
   const fromName = sanitizeName(
     (payload && (payload.f || payload.from)) || params.get(PARAM_FROM) || savedState.fromName,
     ""
   );
   const anonymous = parseBoolean((payload && (payload.a || payload.anon)) || params.get(PARAM_ANON) || "");
+  // Themed pages declare their own vibe; only the generic page falls back to storage.
+  const pageVibe = themes[document.body.dataset.vibe] ? document.body.dataset.vibe : "";
   const theme = sanitizeTheme(
-    (payload && (payload.v || payload.vibe)) || params.get(PARAM_THEME) || readStorage(STORAGE_THEME_KEY) || "classic"
+    (payload && (payload.v || payload.vibe)) || params.get(PARAM_THEME) || pageVibe || readStorage(STORAGE_THEME_KEY) || "classic"
   );
 
   document.body.dataset.vibe = theme;
@@ -56,7 +58,7 @@ function updateText(context) {
   const lead = document.getElementById("afterLead");
   const note = document.getElementById("afterPersonalNote");
 
-  if (headline) {
+  if (headline && context.toName) {
     headline.textContent = `${context.toName} said yes`;
   }
 
@@ -65,17 +67,20 @@ function updateText(context) {
   }
 
   if (note) {
+    const withPartner = context.toName ? ` with ${context.toName}` : "";
     if (context.anonymous || !context.fromName) {
-      note.textContent = `Plan a simple, confident first date with ${context.toName}.`;
+      note.textContent = `Plan a simple, confident first date${withPartner}.`;
       return;
     }
-    note.textContent = `${context.fromName} can now finalize details with ${context.toName}.`;
+    note.textContent = `${context.fromName} can now finalize details${withPartner}.`;
   }
 }
 
 function updateSeo(toName, theme) {
-  const title = `${toName} - ${capitalize(theme)} Afterpage`;
-  document.title = title;
+  if (!toName) {
+    return;
+  }
+  document.title = `${toName} - ${capitalize(theme)} Afterpage`;
   setMeta("meta[name='description']", `Afterpage for ${toName} in ${capitalize(theme)} vibe.`);
 }
 
