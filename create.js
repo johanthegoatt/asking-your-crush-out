@@ -9,7 +9,7 @@ const PARAM_ANON = "anon";
 const PARAM_SONG = "song";
 const DEFAULT_THEME = "classic";
 const DEFAULT_SPOTIFY_TRACK_URL = "";
-const NAME_PATTERN = /^[A-Za-z0-9 .,'-]{1,40}$/;
+const NAME_PATTERN = /^[\p{L}\p{M}\p{N} .,'’-]{1,40}$/u;
 const STORAGE_BUILDER_STATE_KEY = "ask:builder:state:v1";
 
 const LIMITS = {

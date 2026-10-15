@@ -15,7 +15,7 @@ const STORAGE_RESPONSE_KEY = "ask:main:last-response:v1";
 const DEFAULT_THEME = "classic";
 const DEFAULT_AFTER_PAGE = "afterpage-classic.html";
 const DEFAULT_SPOTIFY_TRACK_URL = "";
-const NAME_PATTERN = /^[A-Za-z0-9 .,'-]{1,40}$/;
+const NAME_PATTERN = /^[\p{L}\p{M}\p{N} .,'’-]{1,40}$/u;
 const ACTION_THROTTLE_MS = 260;
 
 const LIMITS = {
