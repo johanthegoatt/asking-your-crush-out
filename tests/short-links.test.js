@@ -154,6 +154,19 @@ test("resolve still redirects regular browsers", async () => {
   assert.equal(res.headers.location, "/?to=Sam");
 });
 
+test("card links get a compact code that is shorter than the link itself", async () => {
+  const { createInternalShortUrl, resolveShortCode } = require("../api/_short-links");
+  const payload = { v: "classic", t: "Alexandra", f: "Jordan", m: "I have been meaning to ask you this", a: 0, s: "" };
+  const token = Buffer.from(JSON.stringify(payload)).toString("base64url");
+  const longUrl = `https://example.com/?p=${token}`;
+  const shortUrl = await createInternalShortUrl({ headers: { host: "example.com" } }, longUrl);
+
+  assert.ok(shortUrl.length < longUrl.length, `${shortUrl.length} >= ${longUrl.length}`);
+  const destination = await resolveShortCode(shortUrl.split("/s/")[1]);
+  const roundTrip = JSON.parse(Buffer.from(new URL(destination, "https://example.com").searchParams.get("p"), "base64url"));
+  assert.deepEqual(roundTrip, payload);
+});
+
 function createMockResponse() {
   const headers = {};
   let statusCode = 200;
