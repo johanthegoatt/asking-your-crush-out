@@ -75,6 +75,18 @@ sceneItems.forEach((item) => {
   renderScene(item, 0);
 });
 
+// The main page swaps data-theme and afterpages set data-vibe; both change --accent.
+if (sceneItems.length) {
+  new MutationObserver(() => {
+    sceneItems.forEach((item) => {
+      applyAccent(item);
+      if (prefersReducedMotion) {
+        renderScene(item, latestTimeSeconds);
+      }
+    });
+  }).observe(document.body, { attributes: true, attributeFilter: ["data-theme", "data-vibe"] });
+}
+
 if (!prefersReducedMotion && sceneItems.length) {
   window.requestAnimationFrame(runAnimation);
 }
@@ -123,17 +135,6 @@ function createSceneItem(element) {
   fillLight.position.set(-2.2, -0.4, 2.8);
   scene.add(fillLight);
 
-  const backdrop = new THREE.Mesh(
-    new THREE.PlaneGeometry(12, 8),
-    new THREE.MeshStandardMaterial({
-      color: type === "celebrate" ? 0xffecf4 : 0xfff4ee,
-      roughness: 0.85,
-      metalness: 0.05,
-    })
-  );
-  backdrop.position.z = -3.8;
-  scene.add(backdrop);
-
   const root = new THREE.Group();
   root.position.y = -0.22;
   scene.add(root);
@@ -167,6 +168,7 @@ function createSceneItem(element) {
     camera,
     root,
     haloRing,
+    fillLight,
     confetti,
     state: {
       floatGroup,
@@ -178,6 +180,7 @@ function createSceneItem(element) {
   };
 
   element.classList.add("is-ready");
+  applyAccent(item);
   loadDatasetModel(item);
 
   return item;
@@ -298,6 +301,29 @@ function renderScene(item, timeSeconds) {
 
   animateConfetti(item.confetti, t);
   item.renderer.render(item.scene, item.camera);
+}
+
+function readAccent(element) {
+  const raw = getComputedStyle(element).getPropertyValue("--accent").trim();
+  if (!raw) {
+    return null;
+  }
+  try {
+    return new THREE.Color(raw);
+  } catch {
+    return null;
+  }
+}
+
+function applyAccent(item) {
+  const accent = readAccent(item.element);
+  if (!accent) {
+    return;
+  }
+  item.fillLight.color.copy(accent).lerp(new THREE.Color(0xffffff), 0.35);
+  if (item.type === "waiting") {
+    item.haloRing.material.color.copy(accent).lerp(new THREE.Color(0xffffff), 0.25);
+  }
 }
 
 function resizeScene(item) {
